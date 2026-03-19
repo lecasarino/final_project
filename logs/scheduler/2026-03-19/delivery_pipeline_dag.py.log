@@ -1,0 +1,28 @@
+[2026-03-19T11:31:30.140+0000] {processor.py:161} INFO - Started process (PID=166) to work on /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:31:30.141+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/delivery_pipeline_dag.py for tasks to queue
+[2026-03-19T11:31:30.142+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:31:30.142+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:31:30.157+0000] {processor.py:840} INFO - DAG(s) 'delivery_pipeline' retrieved from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:31:30.169+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:31:30.169+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2026-03-19T11:31:30.175+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:31:30.175+0000] {dag.py:3947} INFO - Setting next_dagrun for delivery_pipeline to None, run_after=None
+[2026-03-19T11:31:30.182+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/delivery_pipeline_dag.py took 0.046 seconds
+[2026-03-19T11:32:00.384+0000] {processor.py:161} INFO - Started process (PID=171) to work on /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:32:00.385+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/delivery_pipeline_dag.py for tasks to queue
+[2026-03-19T11:32:00.386+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:32:00.386+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:32:00.393+0000] {processor.py:840} INFO - DAG(s) 'delivery_pipeline' retrieved from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:32:00.545+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:32:00.545+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2026-03-19T11:32:00.548+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:32:00.548+0000] {dag.py:3947} INFO - Setting next_dagrun for delivery_pipeline to None, run_after=None
+[2026-03-19T11:32:00.554+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/delivery_pipeline_dag.py took 0.175 seconds
+[2026-03-19T11:32:30.611+0000] {processor.py:161} INFO - Started process (PID=182) to work on /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:32:30.612+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/delivery_pipeline_dag.py for tasks to queue
+[2026-03-19T11:32:30.614+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:32:30.614+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:32:30.621+0000] {processor.py:840} INFO - DAG(s) 'delivery_pipeline' retrieved from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:32:30.639+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:32:30.639+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2026-03-19T11:32:30.644+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:32:30.644+0000] {dag.py:3947} INFO - Setting next_dagrun for delivery_pipeline to None, run_after=None
+[2026-03-19T11:32:30.651+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/delivery_pipeline_dag.py took 0.044 seconds
+[2026-03-19T11:33:00.838+0000] {processor.py:161} INFO - Started process (PID=187) to work on /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:33:00.839+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/delivery_pipeline_dag.py for tasks to queue
+[2026-03-19T11:33:00.840+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:33:00.840+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:33:00.844+0000] {processor.py:840} INFO - DAG(s) 'delivery_pipeline' retrieved from /opt/airflow/dags/delivery_pipeline_dag.py
+[2026-03-19T11:33:00.859+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:33:00.859+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2026-03-19T11:33:00.864+0000] {logging_mixin.py:188} INFO - [2026-03-19T11:33:00.864+0000] {dag.py:3947} INFO - Setting next_dagrun for delivery_pipeline to None, run_after=None
+[2026-03-19T11:33:00.872+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/delivery_pipeline_dag.py took 0.036 seconds

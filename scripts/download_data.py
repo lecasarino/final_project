@@ -3,7 +3,7 @@ import glob
 import gdown
 
 FOLDER_URL = "https://drive.google.com/drive/folders/1h8bwnfuwpQ6oPL_ZjW9H9eM6GvG0OYq0?usp=sharing"
-OUTPUT_DIR = "/opt/project_data/raw"
+OUTPUT_DIR = "/opt/airflow/data/raw"
 
 
 def main():

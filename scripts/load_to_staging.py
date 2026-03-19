@@ -19,7 +19,7 @@ POSTGRES_PROPERTIES = {
     "driver": "org.postgresql.Driver",
 }
 
-PARQUET_PATH = "/opt/project_data/raw/*.parquet"
+PARQUET_PATH = "/opt/airflow/data/raw/*.parquet"
 def main():
     print("START load_to_staging")
     ensure_warehouse()
