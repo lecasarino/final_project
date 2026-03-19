@@ -1,150 +1,152 @@
-# Delivery DWH Project
+# 🚀 Delivery DWH Pipeline
 
-#Описание проекта
+## 📌 Описание проекта
 
-В рамках проекта реализовано построение аналитического хранилища данных (DWH) для сервиса доставки.
+В рамках проекта реализован **end-to-end аналитический DWH pipeline**
+для сервиса доставки.
 
-Pipeline реализует полный цикл обработки данных:
+Pipeline выполняет:
 
-RAW → STAGING → CORE → MART
+-   загрузку сырых данных
+-   построение витрин хранения (DWH Core)
+-   расчёт аналитических мартов
+-   orchestration через Apache Airflow
 
-Используемый стек:
-	•	Docker
-	•	PostgreSQL
-	•	PySpark
-	•	Airflow
+Проект построен по классической **многослойной архитектуре хранилища
+данных (Data Warehouse)**.
 
-#Архитектура
+------------------------------------------------------------------------
 
-Проект реализует классическую слоистую архитектуру DWH:
+## 🧠 Архитектура решения
 
-RAW (parquet)
-     ↓
-STAGING (landing таблица)
-     ↓
-CORE (нормализованная модель)
-     ↓
-MART (витрины)
+Pipeline реализует следующую архитектуру:
 
+RAW → STAGING → CORE (DWH) → MARTS
 
-#Структура репозитория
-final_project/
-│
-├── dags/
-│   └── delivery_pipeline_dag.py
-│
-├── scripts/
-│   ├── download_data.py
-│   ├── load_to_staging.py
-│   ├── normalize_to_core.py
-│   ├── build_facts.py
-│   ├── build_orders_mart.py
-│   └── build_items_mart.py
-│
-├── sql/
-│   ├── staging/
-│   │   └── create_staging.sql
-│   ├── core/
-│   │   └── create_core.sql
-│   └── mart/
-│       └── create_mart.sql
-│
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-└── README.md
+### 📦 RAW layer
 
+Источник данных --- parquet-файлы с заказами.
 
-#Слои DWH
+Загрузка выполняется скриптом:
 
-#RAW
-Хранение исходных parquet файлов.
+scripts/download_data.py
 
-------------------------------
+Файлы сохраняются в:
 
-#STAGING
-Таблица staging.delivery_raw
-Хранит полный денормализованный снапшот заказов.
+data/raw/
 
-------------------------------
+------------------------------------------------------------------------
 
-#CORE
+### ⚙️ STAGING layer
 
-Нормализованная модель:
-	•	dim_user
-	•	dim_driver
-	•	dim_store
-	•	dim_item
-	•	fact_order
-	•	fact_order_item
+Сырые данные загружаются в таблицу:
 
-------------------------------
+staging.orders_raw
 
-#MART
+Особенности:
 
-Построены витрины:
+-   структура максимально близка к источнику
+-   слой используется как landing zone
+-   данные перезаписываются при каждом запуске pipeline
 
-mart.orders_mart
+------------------------------------------------------------------------
 
-Метрики:
-	•	total_orders
-	•	completed_orders
-	•	canceled_orders
-	•	revenue
-	•	avg_delivery_time
+### 🧱 CORE layer (нормализованное DWH)
 
-Гранулярность: день × магазин
-------------------------------
-mart.items_mart
+На этом этапе происходит **нормализация данных и построение модели
+"звезда"**.
 
-Метрики:
-	•	total_items
-	•	canceled_items
-	•	revenue
+Создаются:
 
-Гранулярность: день × товар
-------------------------------
-#Запуск проекта
+#### Natural dimensions
 
-1. Сборка контейнеров
-   docker compose up --build
+-   core.dim_user
+-   core.dim_driver
+-   core.dim_store
+-   core.dim_item
 
-2. Airflow UI
-   http://localhost:8080
-   Логин: airflow
-   Пароль: airflow
+#### Reference dimensions
 
-3. Запуск DAG
-   DAG: delivery_pipeline
-   Pipeline выполняет:
-  	1.	download parquet
-  	2.	load to staging
-  	3.	normalize to core
-  	4.	build facts
-  	5.	build marts
+-   core.dim_category
+-   core.dim_city
+-   core.dim_payment_type
 
-#Особенности
-	•	Проект рассчитан на локальное выполнение
-	•	Объем данных ~10 млн строк
-	•	Возможны долгие выполнения normalize_to_core при ограничениях RAM Docker
+#### Fact table
 
-Pipeline является идемпотентным, воспроизводимым, полностью автоматизированным через Airflow
+-   core.fact_order
 
+Загрузка выполняется idempotent‑подходом (UPSERT), что позволяет
+безопасно перезапускать pipeline.
 
-# Использование витрин
+------------------------------------------------------------------------
 
-После выполнения DAG можно выполнять аналитические запросы:
-select *
-from mart.orders_mart
-order by date desc;
+### 📊 MART layer
 
-#Цель проекта
+Финальные аналитические витрины:
 
-Продемонстрировать навыки:
-	•	построения DWH
-	•	нормализации данных
-	•	построения витрин
-	•	orchestration через Airflow
-	•	работы с PySpark
-	•	контейнеризации
+-   mart.orders_mart --- агрегаты по заказам
+-   mart.items_mart --- агрегаты по товарам
 
+Используются для BI / аналитики.
+
+------------------------------------------------------------------------
+
+## 🔄 Orchestration
+
+Pipeline управляется через **Apache Airflow DAG**
+
+Файл:
+
+dags/delivery_pipeline_dag.py
+
+Последовательность задач:
+
+download_data → load_to_staging → cleanup_pipeline → build_dims_natural
+→ build_dims_reference → build_facts → build_orders_mart →
+build_items_mart
+
+------------------------------------------------------------------------
+
+## 🐳 Запуск проекта
+
+### 1️⃣ Клонировать репозиторий
+
+git clone `<repo_url>`{=html} cd final_project
+
+### 2️⃣ Создать папку для raw данных
+
+mkdir -p data/raw
+
+### 3️⃣ Запустить контейнеры
+
+docker compose up --build
+
+### 4️⃣ Открыть Airflow
+
+http://localhost:8080
+
+Логин: airflow\
+Пароль: airflow
+
+### 5️⃣ Запустить DAG
+
+Открыть DAG `delivery_pipeline` → нажать **Trigger DAG**
+
+------------------------------------------------------------------------
+
+## ⚙️ Технологии
+
+-   Python
+-   PySpark
+-   PostgreSQL
+-   Apache Airflow
+-   Docker
+
+------------------------------------------------------------------------
+
+## 📈 Результат
+
+-   построено нормализованное DWH
+-   реализована star schema
+-   подготовлены аналитические витрины
+-   pipeline полностью воспроизводим
