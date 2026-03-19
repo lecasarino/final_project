@@ -1,0 +1,81 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: delivery_postgres
+    environment:
+      POSTGRES_DB: delivery_dwh
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d delivery_dwh"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  airflow-init:
+    build: .
+    container_name: airflow_init
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/delivery_dwh
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    command: >
+      bash -c "airflow db migrate &&
+      airflow users create
+      --username airflow
+      --firstname Airflow
+      --lastname Admin
+      --role Admin
+      --email airflow@example.com
+      --password airflow || true"
+    volumes:
+      - ./:/opt/airflow
+      - raw_data:/opt/project_data
+
+  airflow-webserver:
+    build: .
+    container_name: airflow_webserver
+    depends_on:
+      postgres:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/delivery_dwh
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "True"
+    command: bash -c "airflow webserver"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/opt/airflow
+      - raw_data:/opt/project_data
+
+  airflow-scheduler:
+    build: .
+    container_name: airflow_scheduler
+    depends_on:
+      postgres:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/delivery_dwh
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    command: bash -c "airflow scheduler"
+    volumes:
+      - ./:/opt/airflow
+      - raw_data:/opt/project_data
+
+volumes:
+  postgres_data:
+  raw_data:
